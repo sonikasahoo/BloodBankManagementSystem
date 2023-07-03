@@ -23,10 +23,7 @@ namespace BloodBankManagementSystem.Controllers
         {
             using (var connection = new SqlConnection(connectionString))
             {
-                string query = @"SELECT COUNT(*) AS Availability
-                             FROM RequestBlood rb
-                             INNER JOIN DonateBlood db ON rb.RequestorId = db.DonorId
-                             WHERE rb.Required_Blood_Group = @BloodGroup";
+                string query = @"SELECT COUNT(*) AS Availability FROM Donor where BloodGroup = @bloodGroup";
 
                 var result = connection.QueryFirstOrDefault(query, new { BloodGroup = bloodGroup });
 

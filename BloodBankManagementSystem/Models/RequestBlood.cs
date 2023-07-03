@@ -14,7 +14,7 @@
 
         public string Hospital_Name_Address { get; set; }
 
-        public string Blood_required_Date { get; set; }
+        public DateTime Blood_required_Date { get; set; }
 
         public string Contact_Name { get; set; }
 

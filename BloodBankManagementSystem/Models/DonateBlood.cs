@@ -2,11 +2,11 @@
 {
     public class DonateBlood
     {
-        public string Donor_Id { get; set; }
+        public string DonorId { get; set; }
 
         public string FullName { get; set; }
 
-        public string DOB { get; set; }
+        public DateTime DOB { get; set; }
 
         public string City { get; set; }
 
