@@ -6,7 +6,7 @@
 
         public string Patient_Name { get; set; }
 
-        public string Requested_Blood_Group { get; set; }
+        public string Required_Blood_Group { get; set; }
 
         public string City { get; set; }
 
@@ -14,7 +14,7 @@
 
         public string Hospital_Name_Address { get; set; }
 
-        public DateOnly Blood_required_Date { get; set; }
+        public string Blood_required_Date { get; set; }
 
         public string Contact_Name { get; set; }
 

@@ -6,7 +6,7 @@
 
         public string PatientId { get; set; }
 
-        public DateOnly Times_Of_The_Day { get; set;}
+        public string Time_Of_The_Day { get; set;}
 
         public string Blood_Glucose_Level { get; set; }
 
