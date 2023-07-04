@@ -17,10 +17,11 @@ namespace BloodBankManagementSystem.Controllers
 
         private readonly string connectionString;
 
-        public BusinessRegisterUser_Controller(IConfiguration configuration)
+        public BusinessRequestBloodAndCheck_Controller(IConfiguration configuration)
         {
             connectionString = configuration.GetConnectionString("DefaultConnection");
         }
+
         [HttpPost]
         public IActionResult MakeRequest(RequestBlood request)
         {

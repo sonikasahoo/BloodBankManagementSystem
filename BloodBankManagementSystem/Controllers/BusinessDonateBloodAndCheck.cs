@@ -18,7 +18,7 @@ namespace BloodBankManagementSystem.Controllers
 
         private readonly string connectionString;
 
-        public BusinessRegisterUser_Controller(IConfiguration configuration)
+        public BuisnessDonateBloodAndCheck(IConfiguration configuration)
         {
             connectionString = configuration.GetConnectionString("DefaultConnection");
         }
