@@ -152,8 +152,8 @@ namespace BloodBankManagementSystem.Controllers
             {
                 using (SqlConnection connection = new SqlConnection(connectionString))
                 {
-                    string query = @"INSERT INTO Requestor (RequestorId, FirstName, LastName, DOB, EmailId, ContactNo, BloodGroup, Address, Gender)
-                                    VALUES (@RequestorId, @FirstName, @LastName, @DOB, @EmailId, @ContactNo, @BloodGroup, @Address, @Gender)";
+                    string query = @"INSERT INTO Requestor (RequestorId, FirstName, LastName, DOB, EmailId, ContactNo, Password, Address, Gender)
+                                    VALUES (@RequestorId, @FirstName, @LastName, @DOB, @EmailId, @ContactNo, @Password, @Address, @Gender)";
 
                     using (SqlCommand command = new SqlCommand(query, connection))
                     {
@@ -162,10 +162,8 @@ namespace BloodBankManagementSystem.Controllers
                         command.Parameters.AddWithValue("@LastName", requestorModel.LastName);
                         command.Parameters.AddWithValue("@DOB", requestorModel.DOB);
                         command.Parameters.AddWithValue("@EmailId", requestorModel.EmailId);
-                        command.Parameters.AddWithValue("@ContactNo",
-
-                        requestorModel.ContactNo);
-                        command.Parameters.AddWithValue("@BloodGroup", requestorModel.BloodGroup);
+                        command.Parameters.AddWithValue("@ContactNo",requestorModel.ContactNo);
+                        command.Parameters.AddWithValue("@Password", requestorModel.Password);
                         command.Parameters.AddWithValue("@Address", requestorModel.Address);
                         command.Parameters.AddWithValue("@Gender", requestorModel.Gender);
 
@@ -193,8 +191,8 @@ namespace BloodBankManagementSystem.Controllers
 
                 using (SqlCommand command = new SqlCommand(query, connection))
                 {
-                    command.Parameters.AddWithValue("@FirstName", loginModel.UserId);
-                    command.Parameters.AddWithValue("@Password", loginModel.Password);
+                    command.Parameters.AddWithValue("@FirstName", requestor.FirstName);
+                    command.Parameters.AddWithValue("@Password", requestor.Password);
 
                     connection.Open();
                     string requestorId = (string)command.ExecuteScalar();
@@ -213,20 +211,25 @@ namespace BloodBankManagementSystem.Controllers
         public IActionResult AuthenticateDonor(string firstname, string password, Donor donor)
         {
 
-            using (var connection = new SqlConnection(connectionString))
+            using (SqlConnection connection = new SqlConnection(connectionString))
             {
-
                 string query = "SELECT DonorId FROM Donor WHERE FirstName = @FirstName AND Password = @Password";
-                donor.FirstName = firstname;
-                donor.Password = password;
-                var donorId = connection.QueryFirstOrDefault<Donor>(query, donor);
 
-                if (donorId != null)
+                using (SqlCommand command = new SqlCommand(query, connection))
                 {
+                    command.Parameters.AddWithValue("@FirstName", donor.FirstName);
+                    command.Parameters.AddWithValue("@Password", donor.Password);
 
-                    return Ok(new { DonorId = donorId, Message = "Authentication successful" });
+                    connection.Open();
+                    string donorId = (string)command.ExecuteScalar();
+
+                    if (!string.IsNullOrEmpty(donorId))
+                    {
+                        return Ok(new { DonorId = donorId, Message = "Authentication successful" });
+                    }
                 }
-                return BadRequest("Not found any donor with the given credentials");
+
+                return NotFound();
             }
         }
         //-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
