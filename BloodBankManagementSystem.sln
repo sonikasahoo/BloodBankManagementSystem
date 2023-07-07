@@ -3,7 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.6.33723.286
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BloodBankManagementSystem", "BloodBankManagementSystem\BloodBankManagementSystem.csproj", "{C3976B87-B3A4-4064-999B-53FD908FC8A2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BloodBankManagementSystem", "BloodBankManagementSystem\BloodBankManagementSystem.csproj", "{C3976B87-B3A4-4064-999B-53FD908FC8A2}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataAccessLayer", "DAL\DataAccessLayer.csproj", "{D86C8A44-6F6F-444E-9BF9-E5D883D09C33}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BusinessAccessLayer", "BusinessAccessLayer\BusinessAccessLayer.csproj", "{65BFC3FB-D519-4C31-B40F-FE33CDBEB758}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +19,14 @@ Global
 		{C3976B87-B3A4-4064-999B-53FD908FC8A2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C3976B87-B3A4-4064-999B-53FD908FC8A2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C3976B87-B3A4-4064-999B-53FD908FC8A2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D86C8A44-6F6F-444E-9BF9-E5D883D09C33}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D86C8A44-6F6F-444E-9BF9-E5D883D09C33}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D86C8A44-6F6F-444E-9BF9-E5D883D09C33}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D86C8A44-6F6F-444E-9BF9-E5D883D09C33}.Release|Any CPU.Build.0 = Release|Any CPU
+		{65BFC3FB-D519-4C31-B40F-FE33CDBEB758}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{65BFC3FB-D519-4C31-B40F-FE33CDBEB758}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{65BFC3FB-D519-4C31-B40F-FE33CDBEB758}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{65BFC3FB-D519-4C31-B40F-FE33CDBEB758}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
