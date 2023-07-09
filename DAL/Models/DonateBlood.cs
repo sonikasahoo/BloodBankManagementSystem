@@ -1,4 +1,6 @@
-﻿namespace BloodBankManagementSystem.Models
+﻿using System;
+
+namespace DataAccessLayer.Models
 {
     public class DonateBlood
     {
@@ -16,8 +18,7 @@
 
         public string Weight { get; set;}
 
-        public string Date_Of_Last_Donation { get; set; }
-
+        public DateTime Date_Of_Last_Donation { get; set; }
 
         public string How_Many_Times { get; set; }
 

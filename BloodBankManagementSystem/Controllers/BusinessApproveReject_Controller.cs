@@ -1,149 +1,97 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using BloodBankManagementSystem.Models;
 using System;
 using System.Data;
 using System.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
 using Microsoft.AspNetCore.Authorization;
+using DataAccessLayer.Models;
+using DataAccessLayer.DataAccess;
+using BusinessAccessLayer.Services;
 
 namespace BloodBankManagementSystem.Controllers
 {
-	[Route("api/[controller]")]
-	[ApiController]
-	public class BusinessApproveReject_Controller : ControllerBase
-	{
-		private readonly string connectionString; 
-		public BusinessApproveReject_Controller(IConfiguration configuration)
-		{
-			connectionString = configuration.GetConnectionString("DefaultConnection");
-		}
-		
-		[HttpGet("GetRequestorDetails/{requestorId}")]
-		public IActionResult GetRequestorDetails(string requestorId)
-		{
-			try
-			{
-				using (var connection = new SqlConnection(connectionString))
-				{
-					connection.Open();
-					var query = "SELECT * FROM requestor WHERE RequestorId = @RequestorId";
-					var command = new SqlCommand(query, connection);
-					command.Parameters.AddWithValue("@RequestorId",requestorId);
+    [Route("api/[controller]")]
+    [ApiController]
+    public class BusinessApproveReject_Controller : ControllerBase
+    {
 
-					var reader=command.ExecuteReader();
-					if(reader.Read())
-					{
-						var requestor = new
-						{
-							RequestorId = reader["RequestorId"].ToString(),
-						};
-						reader.Close();
-						return Ok(requestor);
-					}
-					reader.Close ();
-					return NotFound("Requestor details not found");
-				}
-			}
-			catch(Exception ex)
-			{
-				return BadRequest("Error :" + ex.Message);
-			}
-		}
+        public IServiceApproveReject _IServiceApproveReject;
+        public BusinessApproveReject_Controller(IServiceApproveReject ServiceApproveReject)
+        {
+            _IServiceApproveReject = ServiceApproveReject;
+        }
 
-		[HttpPut("SaveRequestorStatusInfoToDB/{requestorId}")]
-		public IActionResult SaveRequestorStatusInfoToDB(string requestorId, RequestStatus status)
-		{
-			try
-			{
-				using (var connection = new SqlConnection(connectionString))
-				{
-					connection.Open(); 
-					var query = "UPDATE requeststatus SET PatientId = @PatientId , Time_Of_The_Day= @Time_Of_The_Day, Blood_Glucose_Level=@Blood_Glucose_Level , Notes= @Notes WHERE RequestorId = @RequestorId ";
-					var command = new SqlCommand(query, connection);
-					command.Parameters.AddWithValue("@PatientId", status.PatientId);
-					command.Parameters.AddWithValue("@Time_Of_The_Day", status.Time_Of_The_Day);
-					command.Parameters.AddWithValue("@Blood_Glucose_Level", status.Blood_Glucose_Level);
-					command.Parameters.AddWithValue("@Notes", status.Notes);
-					command.Parameters.AddWithValue("@RequestorId", requestorId);
+        // Controller which takes requestor id as parameter and returns requestor details list
 
-					var affectedRows = command.ExecuteNonQuery();
-					if (affectedRows > 0)
-					{
-						return Ok();
-					}
-
-					return NotFound("Requestor not found or status not updated.");
-				}
+        [HttpGet("GetRequestorDetails/{requestorId}")]
+        [Authorize(Roles = "Requestor")]
+        public IActionResult GetRequestorDetails(string requestorId)
+        {
+            try 
+            {
+				var rs = _IServiceApproveReject.getreqdetails(requestorId);
+				return Ok(rs);
 			}
 			catch (Exception ex)
 			{
-				return BadRequest("Error :" + ex.Message);
+				return BadRequest("Error Occurred while retrieving the requestor details : " + ex.Message);
 			}
+
 		}
+
+        // Controller which takes requestor id and object of the class as parameter and updates the status of requestor
+
+        [HttpPut("SaveRequestorStatusInfoToDB/{requestorId}")]
+        [Authorize(Roles = "Requestor")]
+        public IActionResult SaveRequestorStatusInfoToDB(string requestorId, RequestStatus status)
+        {
+            try
+            {
+				_IServiceApproveReject.saverequestorstatusinfotodb(requestorId, status);
+                return Ok("Updated requestor status successfully.");
+			}
+            catch(Exception ex)
+            {
+				return BadRequest("Error Occurred while updating the requestor status : " + ex.Message);
+			}
+        }
+
+		// Controller which takes donor id as parameter and returns donor details list
 
 		[HttpGet("GetDonorDetails/{donorId}")]
-		public IActionResult GetDonorDetails(string donorId)
-		{
-			try
-			{
-				using (var connection = new SqlConnection(connectionString))
-				{
-					connection.Open(); 
-					var query = "SELECT * FROM donor WHERE DonorId = @DonorId";
-					var command = new SqlCommand(query, connection);
-					command.Parameters.AddWithValue("@DonorId", donorId);
-
-					var reader = command.ExecuteReader();
-					if (reader.Read())
-					{
-						var donor = new
-						{
-							Donorld = reader["DonorId"].ToString(),
-						};
-						reader.Close();
-						return Ok(donor);
-					}
-
-					reader.Close();
-					return NotFound("Donor details not found");
-				}
+        [Authorize(Roles = "Donor")]
+        public IActionResult GetDonorDetails(string donorId)
+        {
+            try
+            {
+                var dr = _IServiceApproveReject.getdonordetails(donorId);
+                return Ok(dr);
 			}
-			catch (Exception ex)
-			{
-				return BadRequest("Error :" + ex.Message);
+            catch(Exception ex)
+            {
+				return BadRequest("Error Occurred while retrieving the donor details : " + ex.Message);
 			}
-		}
+                
+            }
+
+	    // Controller which takes donor id and object of the class as parameter and updates the status of donor
+
 
 		[HttpPut("SaveDonorStatusInfoToDB/{donorId}")]
-		public IActionResult SaveDonorStatusInfoToDB(string donorId, DonateBlood donateBlood)
-		{
-			try
-			{
-				using (var connection = new SqlConnection(connectionString))
-				{
-					connection.Open();
-					var query = "UPDATE donateblood SET Status = @Status WHERE DonorId = @DonorId";
-					var command = new SqlCommand(query, connection);
-					command.Parameters.AddWithValue("@Status", donateBlood.Status);
-					command.Parameters.AddWithValue("@DonorId", donorId);
-
-					var affectedRows = command.ExecuteNonQuery();
-					if (affectedRows > 0)
-					{
-						return Ok();
-					}
-
-					return NotFound("Donor not found or status not updated.");
-				}
+        [Authorize(Roles = "Donor")]
+        public IActionResult SaveDonorStatusInfoToDB(string donorId, DonateBlood donateBlood)
+        {
+            try
+            {
+				_IServiceApproveReject.savedonorstatusinfotodb(donorId, donateBlood);
+				return Ok("Donor status updated successfully.");
 			}
-			catch (Exception ex)
-			{
-				return BadRequest("Error :" + ex.Message);
+            catch(Exception ex)
+            {
+				return BadRequest("Error Occurred while updating the donor status : " + ex.Message);
+
 			}
 		}
-
-
-	}
+    }
 }
-

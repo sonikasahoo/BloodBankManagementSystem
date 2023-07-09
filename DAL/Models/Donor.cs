@@ -1,4 +1,4 @@
-﻿namespace BloodBankManagementSystem.Models
+﻿namespace DataAccessLayer.Models
 {
     public class Donor
     {

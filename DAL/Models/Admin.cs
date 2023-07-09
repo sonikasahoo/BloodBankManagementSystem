@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 
-namespace BloodBankManagementSystem.Models
+namespace DataAccessLayer.Models
 {
     public class Admin
     {
